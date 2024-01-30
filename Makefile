@@ -1,12 +1,12 @@
 INSTALL_DIR = /usr/local/bin
 
-default : bw-tool-helper
+default : bitprison-helper
 
-install : bw-tool-helper
-	sudo cp -f target/release/bw-tool-helper $(INSTALL_DIR)
-	sudo cp -f bw-tool.sh $(INSTALL_DIR)/bw-tool
+install : bitprison-helper
+	sudo cp -f target/release/bitprison-helper $(INSTALL_DIR)
+	sudo cp -f bitprison.sh $(INSTALL_DIR)/bitprison
 
-bw-tool-helper : src/main.rs
+bitprison-helper : src/main.rs
 	cargo build --release
 
 clean :

@@ -7,9 +7,10 @@ do
   read -s -p "Master Password: "
   BW_SESSION=$(echo ${REPLY} | bw --raw unlock 2>/dev/null) # stderr has `mac failed.`
   unset REPLY
+  echo
 done
 
-# echo && echo Session ID: ${BW_SESSION}
+# echo Session ID: ${BW_SESSION}
 
 while true
 do
@@ -18,7 +19,7 @@ do
     pass | card | name)
       # stderr node deprecation warning on MacOS
       RAW=$(bw --raw --session "${BW_SESSION}" list items --search "${arr[1]}" 2>/dev/null)
-      bw-tool-helper "${RAW}" "${arr[0]}"
+      bitprison-helper "${RAW}" "${arr[0]}"
       ;;
     clear | c)
       clear
