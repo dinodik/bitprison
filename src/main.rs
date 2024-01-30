@@ -10,6 +10,8 @@ enum Request {
 }
 
 fn display_options(&request: &Request, i: usize, result: json::JsonValue) -> () {
+    // TODO
+    // make the print prettier
     let slice;
     let statements = match request {
         Request::Password => (&result["name"], &result["login"]["username"]),
@@ -74,8 +76,9 @@ fn copy_to_clipboard(output: &str) {
 }
 
 fn after_care() -> () {
-     // - offer to clip pass after requesting user, or user after requesting pass
-     // - clear screen after?
+    // TODO
+    // - offer to clip pass after requesting user, or user after requesting pass
+    // - clear screen after?
     println!("Press enter to clear clipboard.");
     let _ = io::stdin().read_line(&mut String::new());
     copy_to_clipboard("");

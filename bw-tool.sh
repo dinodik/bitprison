@@ -9,7 +9,7 @@ do
   unset REPLY
 done
 
-echo && echo Session ID: ${BW_SESSION}
+# echo && echo Session ID: ${BW_SESSION}
 
 while true
 do
