@@ -84,8 +84,6 @@ fn after_care() -> () {
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    dbg!(env::consts::OS);
-
     let request = match &args[2] as &str {
         "pass" => Request::Password,
         "name" => Request::Username,
