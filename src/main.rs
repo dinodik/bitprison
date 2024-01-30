@@ -60,9 +60,14 @@ fn process_output(&request: &Request, object: json::JsonValue) -> String {
 }
 
 fn copy_to_clipboard(output: &str) {
-    Command::new("sh")
+    let clipper = match env::consts::OS {
+        "linux" => "xclip -selection clipboard",
+        "macos" => "pbcopy",
+        _ => unimplemented!(),
+    };
+    Command::new("bash")
         .arg("-c")
-        .arg(format!("echo -n '{}' | xclip -selection clipboard", output))
+        .arg(format!("echo -n '{}' | {}", output, clipper))
         .status()
         .expect("Failed to copy to clipboard");
     println!("Updated clipboard.");
@@ -78,6 +83,8 @@ fn after_care() -> () {
 
 fn main() {
     let args: Vec<String> = env::args().collect();
+
+    dbg!(env::consts::OS);
 
     let request = match &args[2] as &str {
         "pass" => Request::Password,
