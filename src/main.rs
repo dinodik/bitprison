@@ -61,7 +61,7 @@ fn process_output(&request: &Request, object: json::JsonValue) -> String {
     output.to_string()
 }
 
-fn copy_to_clipboard(output: &str) {
+fn copy_to_clipboard(output: &str, delay: u8) {
     let clipper = match env::consts::OS {
         "linux" => "xclip -selection clipboard",
         "macos" => "pbcopy",
@@ -69,19 +69,10 @@ fn copy_to_clipboard(output: &str) {
     };
     Command::new("bash")
         .arg("-c")
-        .arg(format!("echo -n '{}' | {}", output, clipper))
+        .arg(format!("sleep {} && echo -n '{}' | {}", delay, output, clipper))
         .status()
         .expect("Failed to copy to clipboard");
     println!("Updated clipboard.");
-}
-
-fn after_care() -> () {
-    // TODO
-    // - offer to clip pass after requesting user, or user after requesting pass
-    // - clear screen after?
-    println!("Press enter to clear clipboard.");
-    let _ = io::stdin().read_line(&mut String::new());
-    copy_to_clipboard("");
 }
 
 fn main() {
@@ -112,6 +103,6 @@ fn main() {
 
     let object = data.members().nth(index).unwrap();
     let output = process_output(&request, object.clone());
-    copy_to_clipboard(&output);
-    after_care();
+    copy_to_clipboard(&output, 0);
+    copy_to_clipboard("", 10); // clear clipboard after delay
 }
