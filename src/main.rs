@@ -2,6 +2,8 @@ use std::{env, io};
 use std::process::Command;
 use json;
 
+const CLEAR_CLIP_DELAY: u8 = 10;
+
 #[derive(Debug, Clone, Copy)]
 enum Request {
     Password,
@@ -67,12 +69,12 @@ fn copy_to_clipboard(output: &str, delay: u8) {
         "macos" => "pbcopy",
         _ => unimplemented!(),
     };
+    // run in background process
     Command::new("bash")
         .arg("-c")
-        .arg(format!("sleep {} && echo -n '{}' | {}", delay, output, clipper))
+        .arg(format!("(sleep {} && echo -n '{}' | {}) &", delay, output, clipper))
         .status()
         .expect("Failed to copy to clipboard");
-    println!("Updated clipboard.");
 }
 
 fn main() {
@@ -104,5 +106,6 @@ fn main() {
     let object = data.members().nth(index).unwrap();
     let output = process_output(&request, object.clone());
     copy_to_clipboard(&output, 0);
-    copy_to_clipboard("", 10); // clear clipboard after delay
+    println!("Added to clipboard, will be cleared in {} seconds.", CLEAR_CLIP_DELAY);
+    copy_to_clipboard("", CLEAR_CLIP_DELAY); // clear clipboard after delay
 }
